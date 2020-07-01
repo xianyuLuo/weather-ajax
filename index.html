@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>天气查询</title>
+	<script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/jquery/1.11.3/jquery.js"></script>
+	<script type="text/javascript" src="http://cdn.staticfile.org/artTemplate.js/3.0.1/template.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<style type="text/css">
+		#container1{
+			height: 400px;
+			width: 300px;
+			background-color: #409EF0;
+			text-align: center;
+			margin: auto;
+			padding: 10px;
+		}
+		#container2{
+			font-size: 30px;
+			color: #FFFFFF;
+		}
+		#container3{
+			color: #FFFFFF;
+		}
+		ul{
+			list-style: none;
+			text-align: left;
+		}
+		#query,#city{
+			border-radius: 8px;
+		}
+	</style>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+		  	$("#query").click(function(){
+		  		var city = $("#city").val();
+		   		$.ajax({
+		   			type: "GET",
+		   			url: "http://api.tianapi.com/txapi/tianqi/index",
+		   			data: {
+		   				key: "MyKey",
+		   				city: city
+		   			},
+		   			success: function(data, status){
+		   				console.log(city, data);
+		   				var html = template("resultTemp", data);
+		   				var container = document.querySelector("#container3");
+		   				container.innerHTML = html;
+		   			}
+		   		});
+		 	});
+		});
+	</script>
+
+	<script type="text/html" id="resultTemp">
+		<ul>
+			<li><b>城市</b>：{{newslist[0]["area"]}}</li>
+			<li><b>日期</b>：{{newslist[0]["date"]}}</li>
+			<li><b>天气</b>：{{newslist[0]["weather"]}}</li>
+			<li><b>当前气温</b>：{{newslist[0]["real"]}}</li>
+			<li><b>最低气温</b>：{{newslist[0]["lowest"]}}</li>
+			<li><b>最高气温</b>：{{newslist[0]["highest"]}}</li>
+			<br>
+			<li><b>生活提示</b>：{{newslist[0]["tips"]}}</li>
+		</ul>
+	</script>
+</head>
+<body>
+	<div id="container1">
+		<div id="container2">
+			全国天气查询
+		</div>
+		<hr>
+		<input type="text" name="city" id="city" placeholder="请输入城市名称">
+		<button id="query">查询</button>
+		<div id="container3">
+
+		</div>
+	</div>
+</body>
+</html>
